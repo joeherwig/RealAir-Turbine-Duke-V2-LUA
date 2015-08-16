@@ -1,6 +1,7 @@
-# RealAir Turbine Duke V2 LUA-Script
+# RealAir Turbine Duke V2 LINDA Module
 
-This repository is made to publish and document the lua-Script for LINDA made for the _RealAir Turbine Duke V2_. 
+This repository is made to publish and document the lua-Script for LINDA made for the _RealAir Turbine Duke V2. 
+At the moment the focus is still on publishing the actions.lua not on implementing the complete module.
 
 ![ScreenShot](/img/Title.png)
 
@@ -21,7 +22,7 @@ You can use this Module only as long as you have running
 
 ### Installation
 Several quick start options are available:
-* [Download the latest LINDA Module](https://github.com/joeherwig/RealAir-Turbine-Duke-V2/joeherwig/RealAir-Duke-Turbine-V2.zip) and unzip the content of the folder to your Flight-Simulators root-folder eg. 
+* [Download the latest LINDA Module](/archive/master.zip) and copy the folder "Modules" from the zip to your Flight-Simulators root-folder eg. 
   * `C:\Program Files (x86)\Lockheed Martin\Prepar3D v2\` or 
   * `C:\Program Files (x86)\C:\Program Files (x86)\Microsoft Games\Microsoft Flight Simulator X\`
 * Clone the repo: `git clone https://github.com/joeherwig/RealAir-Turbine-Duke-V2.git` and move the complete subfolder "Modules" to your FS-Root.
@@ -51,8 +52,8 @@ If you're not familiar with using Github you can also send me a Email to inform 
 
 ## Bugs and feature requests
 
-Have a bug or a feature request? Please check first whether your problem or idea is addressed already. If not, please feel free to open a new issue.
+Have a bug or a feature request? Please check first whether your problem or idea is addressed already. If not, please feel free to open a new [issue](https://github.com/joeherwig/RealAir-Turbine-Duke-V2-LUA/issues).
 
 ## Copyright and license
 
-Code and documentation copyright 2015 JoeHerwig released under [the MIT license](https://github.com/twbs/bootstrap/blob/master/LICENSE). Docs released under [Creative Commons](https://github.com/twbs/bootstrap/blob/master/docs/LICENSE).
+Code and documentation copyright 2015 JoeHerwig released under [the MIT license](LICENSE). Docs released under Creative Commons.
