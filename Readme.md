@@ -22,7 +22,7 @@ You can use this Module only as long as you have running
 
 ### Installation
 Several quick start options are available:
-* [Download the latest LINDA Module](/archive/master.zip) and copy the folder "Modules" from the zip to your Flight-Simulators root-folder eg. 
+* [Download the latest LINDA Module](https://github.com/joeherwig/RealAir-Turbine-Duke-V2-LUA/archive/master.zip) and copy the folder "Modules" from the zip to your Flight-Simulators root-folder eg. 
   * `C:\Program Files (x86)\Lockheed Martin\Prepar3D v2\` or 
   * `C:\Program Files (x86)\C:\Program Files (x86)\Microsoft Games\Microsoft Flight Simulator X\`
 * Clone the repo: `git clone https://github.com/joeherwig/RealAir-Turbine-Duke-V2.git` and move the complete subfolder "Modules" to your FS-Root.
