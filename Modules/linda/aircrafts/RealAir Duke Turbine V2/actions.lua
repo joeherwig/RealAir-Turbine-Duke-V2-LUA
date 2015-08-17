@@ -160,9 +160,9 @@ end
 function Ignition_L_toggle_OffAuto ()
 	IgnitionLeftState = ipc.readLvar("L:ignSwLAnt")
 	if IgnitionLeftState == 0 then
-		IgnitionL_auto()
+		Ignition_L_auto()
 	else
-		IgnitionL_off()
+		Ignition_L_off()
 	end
 end
 
@@ -184,9 +184,9 @@ end
 function Ignition_R_toggle_OffAuto ()
 	IgnitionRightState = ipc.readLvar("L:ignSwRAnt")
 	if IgnitionRightState == 0 then
-		IgnitionR_auto()
+		Ignition_R_auto()
 	else
-		IgnitionR_off()
+		Ignition_R_off()
 	end
 end
 
@@ -194,18 +194,19 @@ function Ignition_BOTH_on ()
 	Ignition_R_on()
 	_sleep(150, 350)
 	Ignition_L_on()
+	DspShow ("Ign", "on")
 end
 
 function Ignition_BOTH_off ()
 	Ignition_R_off()
 	_sleep(150, 350)
 	Ignition_L_off()
+	DspShow ("Ign", "off")
 end
 
 function Ignition_BOTH_auto ()
-	Ignition_R_auto()
-	_sleep(150, 350)
-	Ignition_L_auto()
+	Ignition_BOTH_auto()
+	DspShow ("Ign", "auto")
 end
 ---
 
@@ -237,13 +238,13 @@ end
 function Generator_BOTH_on ()
 	ipc.writeSB("3b78", 1)
 	ipc.writeSB("3ab8", 1)
-	DspShow ("GenB", "On")
+	DspShow ("Gen", "On")
 end
 
 function Generator_BOTH_off ()
 	ipc.writeSB("3b78", 0)
 	ipc.writeSB("3ab8", 0)
-	DspShow ("GenB", "Off")
+	DspShow ("Gen", "Off")
 end
 
 
