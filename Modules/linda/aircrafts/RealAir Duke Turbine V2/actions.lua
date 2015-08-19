@@ -8,6 +8,8 @@
 
 function InitVars ()
 	Yoke_Hide ()
+	ChangeCabinPressureByXFeet = 250
+	ChangeCabinRateByX = 50
 end
 
 function LargerockerSound ()
@@ -557,95 +559,179 @@ end
 
 function ParkingBreakesToggle ()
 	ParkingBreakState = ipc.readLvar("L:Brake Parking PositionAnt")
-	DspShow("pBrk", ParkingBreakState)
+	if ParkingBreakState == 0 then
+		ipc.writeLvar("L:BrakeParkingPosition", 1)
+		DspShow("ParkBrk", "set")
+	else
+		ipc.writeLvar("L:BrakeParkingPosition", 0)
+		DspShow("ParkBrk", "release")
+	end
 end
 
 -- ## Cabin ###############
 
-function CabinTempMode_manual_cool()
-	ipc.writeLvar("L:cabinTempMode", -3)
-	DspShow ("CTmp", "cMan")
+function Cabin_Temp_Mode_manual_cool()
+	ipc.writeLvar("L:CabinTempMode", -3)
+	DspShow ("CTemp", "cManual")
 end
 
-function CabinTempMode_cool_auto()
-	ipc.writeLvar("L:cabinTempMode", -2)
-	DspShow ("CTmp", "cAut")
+function Cabin_Temp_Mode_cool_auto()
+	ipc.writeLvar("L:CabinTempMode", -2)
+	DspShow ("CTemp", "cAuto")
 end
 
-function CabinTempMode_cool_blower()
-	ipc.writeLvar("L:cabinTempMode", -1)
-	DspShow ("CTmp", "cBlw")
+function Cabin_Temp_Mode_cool_blower()
+	ipc.writeLvar("L:CabinTempMode", -1)
+	DspShow ("CTemp", "cBlower")
 end
 
-function CabinTempMode_off()
-	ipc.writeLvar("L:cabinTempMode", 0)
-	DspShow ("CTmp", "off")
+function Cabin_Temp_Mode_off()
+	ipc.writeLvar("L:CabinTempMode", 0)
+	DspShow ("CTemp", "off")
 end
 
-function CabinTempMode_heat_auto()
-	ipc.writeLvar("L:cabinTempMode", 1)
-	DspShow ("CTmp", "hAut")
+function Cabin_Temp_Mode_heat_auto()
+	ipc.writeLvar("L:CabinTempMode", 1)
+	DspShow ("CTemp", "hAuto")
 end
 
-function CabinTempMode_heat_manual()
-	ipc.writeLvar("L:cabinTempMode", 2)
-	DspShow ("CTmp", "hMan")
+function Cabin_Temp_Mode_heat_manual()
+	ipc.writeLvar("L:CabinTempMode", 2)
+	DspShow ("CTemp", "hManual")
 end
 
-function CabinTempMode_heat_blower()
-	ipc.writeLvar("L:cabinTempMode", 3)
-	DspShow ("CTmp", "hBlw")
+function Cabin_Temp_Mode_heat_blower()
+	ipc.writeLvar("L:CabinTempMode", 3)
+	DspShow ("CTemp", "hBlower")
 end
 
-function CabinTempMode_inc()
-	CabinModeState = ipc.readLvar("L:cabinTempMode")
+function Cabin_Temp_Mode_inc()
+	CabinModeState = ipc.readLvar("L:CabinTempMode")
 	if CabinModeState == -3 then
-		CabinTempMode_cool_auto()
+		Cabin_Temp_Mode_cool_auto()
 	elseif CabinModeState == -2 then
-		CabinTempMode_cool_blower()
+		Cabin_Temp_Mode_cool_blower()
 	elseif CabinModeState == -1 then
-		CabinTempMode_off()
+		Cabin_Temp_Mode_off()
 	elseif CabinModeState == 0 then
-		CabinTempMode_heat_auto()
+		Cabin_Temp_Mode_heat_auto()
 	elseif CabinModeState == 1 then
-		CabinTempMode_heat_manual()
+		Cabin_Temp_Mode_heat_manual()
 	else
-		CabinTempMode_heat_blower()
+		Cabin_Temp_Mode_heat_blower()
 	end
 end
 
-function CabinTempMode_dec()
-	CabinModeState = ipc.readLvar("L:cabinTempMode")
+function Cabin_Temp_Mode_dec()
+	CabinModeState = ipc.readLvar("L:CabinTempMode")
 	if CabinModeState == 3 then
-		CabinTempMode_heat_manual()
+		Cabin_Temp_Mode_heat_manual()
 	elseif CabinModeState == 2 then
-		CabinTempMode_heat_auto()
+		Cabin_Temp_Mode_heat_auto()
 	elseif CabinModeState == 1 then
-		CabinTempMode_off()
+		Cabin_Temp_Mode_off()
 	elseif CabinModeState == 0 then
-		CabinTempMode_cool_blower()
+		Cabin_Temp_Mode_cool_blower()
 	elseif CabinModeState == -1 then
-		CabinTempMode_cool_auto()
+		Cabin_Temp_Mode_cool_auto()
 	else
-		CabinTempMode_manual_cool()
+		Cabin_Temp_Mode_manual_cool()
 	end
 end
 
-function CabinAirKnop_pull()
-	ipc.writeLvar("L:cabinAirLever", 1)
+function Cabin_Air_Knob_pull()
+	ipc.writeLvar("L:CabinAirLever", 1)
 	DspShow ("CAir", "on")
 end
 
-function CabinAirKnop_push()
-	ipc.writeLvar("L:cabinAirLever", 0)
+function Cabin_Air_Knob_push()
+	ipc.writeLvar("L:CabinAirLever", 0)
 	DspShow ("CAir", "off")
 end
 
-function CabinAirKnop_toggle()
-	CabinAirKnopState = ipc.readLvar("L:cabinAirLeverAnt")
-	if CabinAirKnopState == 0 then
-		CabinAirKnop_pull()
+function Cabin_Air_Knob_toggle()
+	Cabin_Air_KnobState = ipc.readLvar("L:Cabin_Air_LeverAnt")
+	if Cabin_Air_KnobState == 0 then
+		Cabin_Air_Knob_pull()
 	else
-		CabinAirKnop_push()
+		Cabin_Air_Knob_push()
 	end
+end
+
+function Cabin_Pressure_alt_goal_dec()
+	CabinPressureAlt = ipc.readLvar("L:cabinAltGoal")
+	if CabinPressureAlt > ChangeCabinPressureByXFeet then
+        ipc.writeLvar("L:cabinAltGoal", CabinPressureAlt - ChangeCabinPressureByXFeet)
+	else
+	    ipc.writeLvar("L:cabinAltGoal", 0)
+	end
+	CabinPressureAlt = ipc.readLvar("L:cabinAltGoal")
+	DspShow ("CPress", CabinPressureAlt)
+end
+
+function Cabin_Pressure_alt_goal_inc()
+	CabinPressureAlt = ipc.readLvar("L:cabinAltGoal")
+	if CabinPressureAlt <= 10000 - ChangeCabinPressureByXFeet then
+        ipc.writeLvar("L:cabinAltGoal", CabinPressureAlt + ChangeCabinPressureByXFeet)
+	else
+	    ipc.writeLvar("L:cabinAltGoal", 10000)
+	end
+	CabinPressureAlt = ipc.readLvar("L:cabinAltGoal")
+	DspShow ("CPress", CabinPressureAlt)
+end
+
+function Cabin_Pressure_Dump_off()
+	ipc.writeLvar("L:pressureDumpSwitch", 0)
+	DspShow ("CPrDump", "off")
+end
+
+function Cabin_Pressure_Dump_on()
+	ipc.writeLvar("L:pressureDumpSwitch", 1)
+	DspShow ("CPrDump", "dump")
+end
+
+function Cabin_Pressure_Dump_toggle()
+	CabinPressureDumpState = ipc.readLvar("L:pressureDumpSwitchAnt")
+	if CabinPressureDumpState == 1 then
+		Cabin_Pressure_Dump_off()
+	else
+		Cabin_Pressure_Dump_on()
+	end
+end
+
+function Cabin_Rate_Knob_dec()
+	CabinRateVal = ipc.readLvar("L:CabinRateKnob")
+	if CabinRateAlt > ChangeCabinRateByX then
+        ipc.writeLvar("L:CabinRateKnob", CabinRateAlt - ChangeCabinRateByX)
+	else
+	    ipc.writeLvar("L:CabinRateKnob", 100)
+	end
+	CabinRateAlt = ipc.readLvar("L:CabinRateKnob")
+	DspShow ("CRate", CabinRateAlt)
+end
+
+function Cabin_Rate_Knob_inc()
+	CabinRateState = ipc.readLvar("L:CabinRateKnob")
+	if CabinRateState <= 2000 - ChangeCabinRateByX then
+        ipc.writeLvar("L:CabinRateKnob", CabinRateState + ChangeCabinRateByX)
+	else
+	    ipc.writeLvar("L:CabinRateKnob", 2000)
+	end
+	CabinRateAlt = ipc.readLvar("L:CabinRateKnob")
+	DspShow ("CRate", CabinRateAlt)
+end
+
+function Cabin_Pressure_Shutoff_Lever_1_on()
+
+	
+end
+
+function Cabin_Pressure_Shutoff_Lever_1_off()
+
+	
+end
+
+function Cabin_Pressure_Shutoff_Lever_1_toggle()
+
+	
 end
