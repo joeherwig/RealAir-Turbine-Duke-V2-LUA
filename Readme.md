@@ -20,6 +20,9 @@ You can use this Module only as long as you have running
 * [LINDA](http://www.fs-linda.com/)
 * a device to use with LINDA 
 
+### Backup your own settings!
+I strongly recommend to make a backup of your own files before overwriting yours with the settings from this package.
+
 ### Installation
 Several quick start options are available:
 * [Download the latest LINDA Module](https://github.com/joeherwig/RealAir-Turbine-Duke-V2-LUA/archive/master.zip) and copy the folder "Modules" from the zip to your Flight-Simulators root-folder eg. 
@@ -43,7 +46,6 @@ The "Ignition_..._toggle_OffAuto"-functions only toggle between "Off" and "Auto"
 
 ### Init
 On Loading the vehicle i only hide the yokes to enable a better view to the buttons hidden behind the yokes. If you prefer not to hide the yokes, feel free to remove the line Yoke_Hide() from the init.
-### Other
 
 ## Contributing
 

@@ -7,7 +7,6 @@
 -- ## system ###############
 
 function InitVars ()
-
 	Yoke_Hide ()
 end
 
@@ -559,4 +558,94 @@ end
 function ParkingBreakesToggle ()
 	ParkingBreakState = ipc.readLvar("L:Brake Parking PositionAnt")
 	DspShow("pBrk", ParkingBreakState)
+end
+
+-- ## Cabin ###############
+
+function CabinTempMode_manual_cool()
+	ipc.writeLvar("L:cabinTempMode", -3)
+	DspShow ("CTmp", "cMan")
+end
+
+function CabinTempMode_cool_auto()
+	ipc.writeLvar("L:cabinTempMode", -2)
+	DspShow ("CTmp", "cAut")
+end
+
+function CabinTempMode_cool_blower()
+	ipc.writeLvar("L:cabinTempMode", -1)
+	DspShow ("CTmp", "cBlw")
+end
+
+function CabinTempMode_off()
+	ipc.writeLvar("L:cabinTempMode", 0)
+	DspShow ("CTmp", "off")
+end
+
+function CabinTempMode_heat_auto()
+	ipc.writeLvar("L:cabinTempMode", 1)
+	DspShow ("CTmp", "hAut")
+end
+
+function CabinTempMode_heat_manual()
+	ipc.writeLvar("L:cabinTempMode", 2)
+	DspShow ("CTmp", "hMan")
+end
+
+function CabinTempMode_heat_blower()
+	ipc.writeLvar("L:cabinTempMode", 3)
+	DspShow ("CTmp", "hBlw")
+end
+
+function CabinTempMode_inc()
+	CabinModeState = ipc.readLvar("L:cabinTempMode")
+	if CabinModeState == -3 then
+		CabinTempMode_cool_auto()
+	elseif CabinModeState == -2 then
+		CabinTempMode_cool_blower()
+	elseif CabinModeState == -1 then
+		CabinTempMode_off()
+	elseif CabinModeState == 0 then
+		CabinTempMode_heat_auto()
+	elseif CabinModeState == 1 then
+		CabinTempMode_heat_manual()
+	else
+		CabinTempMode_heat_blower()
+	end
+end
+
+function CabinTempMode_dec()
+	CabinModeState = ipc.readLvar("L:cabinTempMode")
+	if CabinModeState == 3 then
+		CabinTempMode_heat_manual()
+	elseif CabinModeState == 2 then
+		CabinTempMode_heat_auto()
+	elseif CabinModeState == 1 then
+		CabinTempMode_off()
+	elseif CabinModeState == 0 then
+		CabinTempMode_cool_blower()
+	elseif CabinModeState == -1 then
+		CabinTempMode_cool_auto()
+	else
+		CabinTempMode_manual_cool()
+	end
+end
+
+function CabinAirKnop_pull()
+	ipc.writeLvar("L:cabinAirLever", 1)
+	DspShow ("CAir", "on")
+end
+
+function CabinAirKnop_push()
+	ipc.writeLvar("L:cabinAirLever", 0)
+	DspShow ("CAir", "off")
+end
+
+function CabinAirKnop_toggle()
+	CabinAirKnopState = ipc.readLvar("L:cabinAirLeverAnt")
+	if CabinAirKnopState == 0 then
+		CabinAirKnop_pull()
+	else
+		CabinAirKnop_push()
+	end
 end
