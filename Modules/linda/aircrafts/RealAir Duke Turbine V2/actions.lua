@@ -557,14 +557,27 @@ function RXP_530_show ()
 	ipc.keypress(50,9)
 end
 
-function ParkingBreakesToggle ()
+function Parking_Breakes_set ()
 	ParkingBreakState = ipc.readLvar("L:Brake Parking PositionAnt")
-	if ParkingBreakState == 0 then
-		ipc.writeLvar("L:BrakeParkingPosition", 1)
-		DspShow("ParkBrk", "set")
+	if ParkingBreakState <= 50 then
+    	ipc.control("65752", 1)
+    end
+	DspShow("ParkBrk", "set")
+end
+
+function Parking_Breakes_release ()
+	ParkingBreakState = ipc.readLvar("L:Brake Parking PositionAnt")
+	if ParkingBreakState >= 50 then
+        ipc.control("65752", 0)
+    end
+    DspShow("ParkBrk", "release")
+end
+function Parking_Breakes_toggle ()
+	ParkingBreakState = ipc.readLvar("L:Brake Parking PositionAnt")
+	if ParkingBreakState <= 50 then
+        Parking_Breakes_set ()
 	else
-		ipc.writeLvar("L:BrakeParkingPosition", 0)
-		DspShow("ParkBrk", "release")
+        Parking_Breakes_release ()
 	end
 end
 
@@ -722,16 +735,19 @@ function Cabin_Rate_Knob_inc()
 end
 
 function Cabin_Pressure_Shutoff_Lever_1_on()
-
-	
 end
 
 function Cabin_Pressure_Shutoff_Lever_1_off()
-
-	
 end
 
 function Cabin_Pressure_Shutoff_Lever_1_toggle()
+end
 
-	
+function Cabin_Pressure_Shutoff_Lever_2_on()
+end
+
+function Cabin_Pressure_Shutoff_Lever_2_off()
+end
+
+function Cabin_Pressure_Shutoff_Lever_2_toggle()
 end
