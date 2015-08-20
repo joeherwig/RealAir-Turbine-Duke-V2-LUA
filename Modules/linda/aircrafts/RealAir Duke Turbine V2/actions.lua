@@ -735,19 +735,39 @@ function Cabin_Rate_Knob_inc()
 end
 
 function Cabin_Pressure_Shutoff_Lever_1_on()
+	ipc.writeLvar("L:pressAirShutoffLever1", 1)
+	DspShow ("Shutof1", "on")
 end
 
 function Cabin_Pressure_Shutoff_Lever_1_off()
+	ipc.writeLvar("L:pressAirShutoffLever1", 0)
+	DspShow ("Shutof1", "off")
 end
 
 function Cabin_Pressure_Shutoff_Lever_1_toggle()
+	CabinShutoff1State = ipc.readLvar("L:pressAirShutoffLever1Ant")
+	if CabinShutoff1State == 0 then
+		Cabin_Pressure_Shutoff_Lever_1_on()
+	else
+		Cabin_Pressure_Shutoff_Lever_1_off()
+	end
 end
 
 function Cabin_Pressure_Shutoff_Lever_2_on()
+	ipc.writeLvar("L:pressAirShutoffLever2", 1)
+	DspShow ("Shutof2", "on")
 end
 
 function Cabin_Pressure_Shutoff_Lever_2_off()
+	ipc.writeLvar("L:pressAirShutoffLever2", 0)
+	DspShow ("Shutof2", "off")
 end
 
 function Cabin_Pressure_Shutoff_Lever_2_toggle()
+	CabinShutoff2State = ipc.readLvar("L:pressAirShutoffLever2Ant")
+	if CabinShutoff2State == 0 then
+		Cabin_Pressure_Shutoff_Lever_2_on()
+	else
+		Cabin_Pressure_Shutoff_Lever_2_off()
+	end
 end
