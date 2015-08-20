@@ -10,6 +10,7 @@ function InitVars ()
 	Yoke_Hide ()
 	ChangeCabinPressureByXFeet = 250
 	ChangeCabinRateByX = 50
+	ChangeCabinPressureTempByX = 10
 end
 
 function LargerockerSound ()
@@ -654,22 +655,43 @@ end
 
 function Cabin_Air_Knob_pull()
 	ipc.writeLvar("L:CabinAirLever", 1)
-	DspShow ("CAir", "on")
+	DspShow ("Cab Air", "on")
 end
 
 function Cabin_Air_Knob_push()
 	ipc.writeLvar("L:CabinAirLever", 0)
-	DspShow ("CAir", "off")
+	DspShow ("Cab Air", "off")
 end
 
 function Cabin_Air_Knob_toggle()
-	Cabin_Air_KnobState = ipc.readLvar("L:Cabin_Air_LeverAnt")
+	Cabin_Air_KnobState = ipc.readLvar("L:cabinAirLeverAnt")
 	if Cabin_Air_KnobState == 0 then
 		Cabin_Air_Knob_pull()
 	else
 		Cabin_Air_Knob_push()
 	end
 end
+
+function Copilot_Air_Knob_pull()
+	ipc.writeLvar("L:copilotAirLever", 1)
+	DspShow ("FO Air", "on")
+end
+
+function Copilot_Air_Knob_push()
+	ipc.writeLvar("L:copilotAirLever", 0)
+	DspShow ("FO Air", "off")
+end
+
+function Copilot_Air_Knob_toggle()
+	Copilot_Air_KnobState = ipc.readLvar("L:copilotAirLeverAnt")
+	if Copilot_Air_KnobState == 0 then
+		Copilot_Air_Knob_pull()
+	else
+		Copilot_Air_Knob_push()
+	end
+end
+
+-- copilotAirLeverAnt
 
 function Cabin_Pressure_alt_goal_dec()
 	CabinPressureAlt = ipc.readLvar("L:cabinAltGoal")
@@ -771,3 +793,48 @@ function Cabin_Pressure_Shutoff_Lever_2_toggle()
 		Cabin_Pressure_Shutoff_Lever_2_off()
 	end
 end
+
+function Cabin_Pressure_Temp_Lever_1_inc ()
+	CabinPressTemp1Value = ipc.readLvar("L:pressTempLever1")
+	if CabinPressTemp1Value <= 25 - ChangeCabinPressureTempByX then
+        ipc.writeLvar("L:pressTempLever1", CabinPressTemp1Value + ChangeCabinPressureTempByX)
+	else
+	    ipc.writeLvar("L:pressTempLever1", 25)
+	end
+	CabinPressTemp1Value = ipc.readLvar("L:pressTempLever1")
+	DspShow ("CPrTemp1", CabinPressTemp1Value)
+end
+
+function Cabin_Pressure_Temp_Lever_1_dec ()
+	CabinPressTemp1Value = ipc.readLvar("L:pressTempLever1")
+	if CabinPressTemp1Value >= -75 + ChangeCabinPressureTempByX then
+        ipc.writeLvar("L:pressTempLever1", CabinPressTemp1Value - ChangeCabinPressureTempByX)
+	else
+	    ipc.writeLvar("L:pressTempLever1", -75)
+	end
+	CabinPressTemp1Value = ipc.readLvar("L:pressTempLever1")
+	DspShow ("CPrTemp1", CabinPressTemp1Value)
+end
+
+function Cabin_Pressure_Temp_Lever_2_inc ()
+	CabinPressTemp2Value = ipc.readLvar("L:pressTempLever2")
+	if CabinPressTemp2Value <= 25 - ChangeCabinPressureTempByX then
+        ipc.writeLvar("L:pressTempLever2", CabinPressTemp2Value + ChangeCabinPressureTempByX)
+	else
+	    ipc.writeLvar("L:pressTempLever2", 25)
+	end
+	CabinPressTemp2Value = ipc.readLvar("L:pressTempLever2")
+	DspShow ("CPrTemp2", CabinPressTemp2Value)
+end
+
+function Cabin_Pressure_Temp_Lever_2_dec ()
+	CabinPressTemp2Value = ipc.readLvar("L:pressTempLever2")
+	if CabinPressTemp2Value >= -75 + ChangeCabinPressureTempByX then
+        ipc.writeLvar("L:pressTempLever2", CabinPressTemp2Value - ChangeCabinPressureTempByX)
+	else
+	    ipc.writeLvar("L:pressTempLever2", -75)
+	end
+	CabinPressTemp2Value = ipc.readLvar("L:pressTempLever2")
+	DspShow ("CPrTemp2", CabinPressTemp2Value)
+end
+
