@@ -10,7 +10,7 @@ At the moment the focus is still on publishing the [actions.lua](Modules/linda/a
 * [Documentation](#documentation)
 * [Contributing](#contributing)
 * [Bugs and feature requests](#bugs-and-feature-requests)
-* [Copyright and license](#Copyright-and-license)
+* [Copyright and license](#copyright-and-license)
 
 ## Quick start
 ### Prerequesities
