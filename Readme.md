@@ -34,18 +34,26 @@ Several quick start options are available:
 I tried to name all functions in a way that directly tells you what it does.
 In some special cases it might be neccesary to explain you something more detailed. Then i make some additional remarks in this section. So this section is not intended to repeat everything i allreade "said" while giving the function names. So ... It will not be complete and hopefully not bother you with its length.
 
+### Init
+* `Yoke_Hide`: On Loading the vehicle i hide the yokes to enable a better view to the buttons hidden behind the yokes. If you prefer not to hide the yokes, feel free to remove the line Yoke_Hide() from the init.
+
+* `ChangeCabinPressureByXFeet = 250`: This line is used to define the step-width for incrementing and decrementing the cabin pressure goal altitude when using the `Cabin_Pressure_alt_goal_dec` and `Cabin_Pressure_alt_goal_inc` function.
+* `ChangeCabinRateByX = 50`: This line is used to define the step-width for incrementing and decrementing the desired speed for adapting the cabin pressure between the current state and the cabin pressure goal altitude  when using the `Cabin_Rate_Knob_dec` and `Cabin_Rate_Knob_inc` function.
+* `ChangeCabinPressureTempByX = 10`: This line is used to define the step-width for incrementing and decrementing the cabin pressure temp when using the functions:
+    * `Cabin_Pressure_Temp_Lever_1_inc`
+    * `Cabin_Pressure_Temp_Lever_1_dec`
+    * `Cabin_Pressure_Temp_Lever_2_inc`
+    * `Cabin_Pressure_Temp_Lever_2_dec`
+
 ### Avionics
-Switching on the avionics is useally not done all at the same time. The listed function to switch the avionics, contains some *delays* to reflect this.
+Just taken from guenselis great 1.3-Version. Thanks a lot!
 
 ### Electrics
-Turbine Ignition
+Turbine Ignition added:
 
 ![Turbine Ignition](/img/TurbineIgnition.png)
 
 The "Ignition_..._toggle_OffAuto"-functions only toggle between "Off" and "Auto" and vice versa. The third state of this button "on" isn't reflected in this function, because i have only a simple pushbutton and it seems, "Auto" is enough for my needs, so that explicit "on" can be skipped.
-
-### Init
-On Loading the vehicle i only hide the yokes to enable a better view to the buttons hidden behind the yokes. If you prefer not to hide the yokes, feel free to remove the line Yoke_Hide() from the init.
 
 ## Contributing
 
