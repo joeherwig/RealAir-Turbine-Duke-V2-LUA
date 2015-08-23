@@ -252,76 +252,161 @@ end
 
 -- ## Fuel #####################################
 
--- Fuel pump + valve ENG1 on (both engines)
-
-function FuelPumpENG1_on ()
-	ipc.writeSB("3b98", 1)
-	DspShow("Pump", "1 on")
+-- Fuel Pumps:
+function Fuel_Pump_1_ENG_L_on ()
+	ipc.control(66340, 0)
+	DspShow("Pump L", "1 on")
 end
 
-function FuelPumpENG1_off ()
-	ipc.writeSB("3b98", 0)
-	DspShow("Pump", "1off")
+function Fuel_Pump_1_ENG_L_off ()
+	ipc.control(66340, 1)
+	DspShow("Pump L", "off")
 end
 
-
-function FuelPumpENG2_on ()
-	ipc.writeSB("3ad8", 1)
-	DspShow("Pump", "2 on")
+function Fuel_Pump_1_ENG_L_toggle()
+	Fuel_PumpswitchLState = ipc.readLvar("L:Fuel_PumpswitchL")
+	if Fuel_PumpswitchLState == 0 then
+		Fuel_Pump_1_ENG_L_on()
+	else
+		Fuel_Pump_1_ENG_L_off()
+	end
 end
 
-function FuelPumpENG2_off ()
-	ipc.writeSB("3ad8", 0)
-	DspShow("Pump", "2off")
+function Fuel_Pump_1_ENG_R_on ()
+	ipc.control(66341, 0)
+	DspShow("Pump R", "1 on")
 end
 
+function Fuel_Pump_1_ENG_R_off ()
+	ipc.control(66341, 1)
+	DspShow("Pump R", "off")
+end
 
-function FuelValveENG1_on ()
+function Fuel_Pump_1_ENG_R_toggle()
+	Fuel_PumpswitchRState = ipc.readLvar("L:Fuel_PumpswitchR")
+	if Fuel_PumpswitchRState == 0 then
+		Fuel_Pump_1_ENG_R_on()
+	else
+		Fuel_Pump_1_ENG_R_off()
+	end
+end
+
+function Fuel_Pumps_on ()
+	Fuel_Pump_1_ENG_L_on ()
+	_sleep(150, 350)
+	Fuel_Pump_1_ENG_R_on ()
+end
+
+function Fuel_Pumps_off ()
+	 Fuel_Pump_1_ENG_L_off ()
+	_sleep(150, 350)
+	Fuel_Pump_ENG_2_off ()
+end
+
+function Fuel_Pump_1_ENG_L_toggle ()
+	 Fuel_Pump_1_ENG_L_off ()
+	_sleep(150, 350)
+	Fuel_Pump_1_ENG_R_toggle ()
+end
+
+-- Fuel Valves:
+function Fuel_Valve_ENG_L_on ()
 	ipc.writeLvar("L:Duke_Tank_Selector_L", 50)
 	DspShow("Fuel", "1 on")
 end
 
-
-function FuelValveENG1_off ()
+function Fuel_Valve_ENG_L_off ()
 	ipc.writeLvar("L:Duke_Tank_Selector_L", 0)
-	DspShow("Fuel", "1off")
+	DspShow("Fuel", "1 off")
 end
 
+function Fuel_Valve_ENG_L_XFeed ()
+	ipc.writeLvar("L:Duke_Tank_Selector_L", 100)
+	DspShow("Fuel", "1 XFeed")
+end
 
-function FuelValveENG2_on ()
+function Fuel_Valve_ENG_L_dec ()
+	Fuel_Valve_L_State = ipc.readLvar("L:Duke_Tank_Selector_L_Ant")
+	if Fuel_Valve_L_State == 100 then
+		Fuel_Valve_ENG_L_on ()
+	elseif Fuel_Valve_L_State == 50 then
+		Fuel_Valve_ENG_L_off ()
+	end
+end
+
+function Fuel_Valve_ENG_L_inc ()
+	Fuel_Valve_L_State = ipc.readLvar("L:Duke_Tank_Selector_L_Ant")
+	if Fuel_Valve_L_State == 0 then
+		Fuel_Valve_ENG_L_on ()
+	elseif Fuel_Valve_L_State == 50 then
+		Fuel_Valve_ENG_L_XFeed ()
+	end
+end
+
+function Fuel_Valve_ENG_R_on ()
 	ipc.writeLvar("L:Duke_Tank_Selector_R", 50)
 	DspShow("Fuel", "2 on")
 end
 
-function FuelValveENG2_off ()
+function Fuel_Valve_ENG_R_off ()
 	ipc.writeLvar("L:Duke_Tank_Selector_R", 0)
-	DspShow("Fuel", "2off")
+	DspShow("Fuel", "2 off")
 end
 
-
-
-function FuelPumps_on ()
-	FuelPumpENG1_on ()
-	_sleep(150, 350)
-	FuelPumpENG2_on ()
+function Fuel_Valve_ENG_R_XFeed ()
+	ipc.writeLvar("L:Duke_Tank_Selector_R", 100)
+	DspShow("Fuel", "2 XFeed")
 end
 
-function FuelPumps_off ()
-	 FuelPumpENG1_off ()
-	_sleep(150, 350)
-	FuelPumpENG2_off ()
+function Fuel_Valve_ENG_R_dec ()
+	Fuel_Valve_R_State = ipc.readLvar("L:Duke_Tank_Selector_R_Ant")
+	if Fuel_Valve_R_State == 100 then
+		Fuel_Valve_ENG_R_on()
+	elseif Fuel_Valve_R_State == 50 then
+		Fuel_Valve_ENG_R_off()
+	end
 end
 
-function FuelValves_on ()
-	FuelValveENG1_on ()
-	_sleep(150, 350)
-	FuelValveENG2_on ()
+function Fuel_Valve_ENG_R_inc ()
+	Fuel_Valve_R_State = ipc.readLvar("L:Duke_Tank_Selector_R_Ant")
+	if Fuel_Valve_R_State == 0 then
+		Fuel_Valve_ENG_R_on()
+	elseif Fuel_Valve_R_State == 50 then
+		Fuel_Valve_ENG_R_XFeed()
+	end
 end
 
-function FuelValves_off ()
-	FuelValveENG1_off ()
-	_sleep(150, 350)
-	FuelValveENG2_off ()
+function Fuel_Valves_on ()
+	Fuel_Valve_ENG_R_on()
+	_sleep(350, 550)
+	Fuel_Valve_ENG_L_on()
+end
+
+function Fuel_Valves_off ()
+	Fuel_Valve_ENG_R_off()
+	_sleep(350, 550)
+	Fuel_Valve_ENG_L_off()
+end
+
+function Fuel_Valves_dec ()
+	Fuel_Valve_ENG_R_dec()
+	_sleep(550, 650)
+	Fuel_Valve_ENG_L_dec()
+end
+
+function Fuel_Valves_inc ()
+	Fuel_Valve_ENG_R_inc()
+	_sleep(550, 650)
+	Fuel_Valve_ENG_L_inc()
+end
+
+function Fuel_Valves_toggle_OnOff()
+	Fuel_Valve_L_State = ipc.readLvar("L:Duke_Tank_Selector_L_Ant")
+	if Fuel_Valve_L_State == 0 then
+		Fuel_Valves_on()
+	else
+		Fuel_Valves_off()
+	end
 end
 
 -- ## Cowl Flaps #####################################

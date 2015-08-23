@@ -55,6 +55,11 @@ Turbine Ignition added:
 
 The "Ignition_..._toggle_OffAuto"-functions only toggle between "Off" and "Auto" and vice versa. The third state of this button "on" isn't reflected in this function, because i have only a simple pushbutton and it seems, "Auto" is enough for my needs, so that explicit "on" can be skipped.
 
+### Fuel
+Added the Fuel-Valves for direct interaction and rotary encoders:
+![Fuel Valves](/img/FuelValves.png)
+Here as well the _toggle-Function only toggles between "Off" and "On". "XFeed" is not included in the "_toggle".
+
 ## Contributing
 
 Probably you want push this script a small step or a big leap forward. You're welcome to do so. Just fork this repo, check-in your changes and send me a pull-request.
