@@ -143,25 +143,24 @@ function Battery_toggle ()
 end
 
 -- turbine Ignition
-
 function Ignition_L_on ()
 	ipc.writeLvar("L:ignSwL", 2)
-	DspShow ("IgnR", "on")
+	DspShow ("Ign L", "on")
 end
 
 function Ignition_L_off ()
-	ipc.writeLvar("L:ignSwL", 0)
-	DspShow ("IgnR", "off")
+	ipc.writeLvar("L:ignSwL", 1)
+	DspShow ("Ign L", "off")
 end
 
 function Ignition_L_auto ()
-	ipc.writeLvar("L:ignSwL", 2)
-	DspShow ("IgnR", "auto")
+	ipc.writeLvar("L:ignSwL", 0)
+	DspShow ("Ign L", "auto")
 end
 
 function Ignition_L_toggle_OffAuto ()
-	IgnitionLeftState = ipc.readLvar("L:ignSwLAnt")
-	if IgnitionLeftState == 0 then
+	IgnitionLightState = ipc.readLvar("L:ignSwLAnt")
+	if IgnitionLightState == 1 then
 		Ignition_L_auto()
 	else
 		Ignition_L_off()
@@ -170,22 +169,22 @@ end
 
 function Ignition_R_on ()
 	ipc.writeLvar("L:ignSwR", 2)
-	DspShow ("IgnR", "on")
+	DspShow ("Ign R", "on")
 end
 
 function Ignition_R_off ()
-	ipc.writeLvar("L:ignSwR", 0)
-	DspShow ("IgnR", "off")
+	ipc.writeLvar("L:ignSwR", 1)
+	DspShow ("Ign R", "off")
 end
 
 function Ignition_R_auto ()
-	ipc.writeLvar("L:ignSwR", 2)
-	DspShow ("IgnR", "auto")
+	ipc.writeLvar("L:ignSwR", 0)
+	DspShow ("Ign R", "auto")
 end
 
 function Ignition_R_toggle_OffAuto ()
 	IgnitionRightState = ipc.readLvar("L:ignSwRAnt")
-	if IgnitionRightState == 0 then
+	if IgnitionRightState == 1 then
 		Ignition_R_auto()
 	else
 		Ignition_R_off()
@@ -194,119 +193,155 @@ end
 
 function Ignition_BOTH_on ()
 	Ignition_R_on()
-	_sleep(150, 350)
+	_sleep(450, 550)
 	Ignition_L_on()
 	DspShow ("Ign", "on")
 end
 
 function Ignition_BOTH_off ()
 	Ignition_R_off()
-	_sleep(150, 350)
+	_sleep(450, 550)
 	Ignition_L_off()
 	DspShow ("Ign", "off")
 end
 
 function Ignition_BOTH_auto ()
-	Ignition_BOTH_auto()
+	Ignition_R_auto()
+	_sleep(450, 550)
+	Ignition_L_auto()
 	DspShow ("Ign", "auto")
 end
----
+
+function Ignition_BOTH_toggle_OffAuto ()
+	IgnitionRightState = ipc.readLvar("L:ignSwRAnt")
+	if IgnitionRightState == 1 then
+		Ignition_BOTH_auto()
+	else
+		Ignition_BOTH_off()
+	end
+end
 
 -- generator
 function Generator_L_on ()
-	ipc.writeSB("3b78", 1)
-	DspShow ("GenL", "On")
+	ipc.writeSB("3b78", 0)
+	DspShow ("Gen L", "On")
 end
 
 function Generator_L_off ()
-	ipc.writeSB("3b78", 0)
-	DspShow ("GenL", "Off")
+	ipc.writeSB("3b78", 1)
+	DspShow ("Gen L", "Off")
+end
+
+function Generator_L_start ()
+	ipc.writeSB("3b78", 2)
+	DspShow ("Gen L", "start")
 end
 
 function Generator_L_toggle ()
-	GeneratorLStatus = ipc.readLvar("L:RECIP ENG COWL FLAP POSITION2Ant")
-end
-
-function Generator_R_off ()
-	ipc.writeSB("3ab8", 0)
-	DspShow ("GenR", "Off")
+	GeneratorLStatus = ipc.readLvar("L:starterSwitchLAnt")
+	DspShow ("Gen L:", GeneratorLStatus)
+	if GeneratorLStatus == 1 then
+		Starter_L_on()
+	else
+		Starter_L_off()
+		Generator_L_off()
+	end
 end
 
 function Generator_R_on ()
+	ipc.writeSB("3ab8", 0)
+	DspShow ("Gen R", "On")
+end
+
+function Generator_R_off ()
 	ipc.writeSB("3ab8", 1)
-	DspShow ("GenR", "On")
+	DspShow ("Gen R", "Off")
+end
+
+function Generator_R_start ()
+	ipc.control(66301, 0)
+	DspShow ("Gen R", "start")
+end
+
+function Generator_R_toggle ()
+	GeneratorRStatus = ipc.readLvar("L:starterSwitchRAnt")
+	DspShow ("Gen R:", GeneratorRStatus)
+	if GeneratorRStatus == 1 then
+		Starter_R_on()
+	else
+		Starter_R_off()
+		Generator_R_off()
+	end
 end
 
 function Generator_BOTH_on ()
 	ipc.writeSB("3b78", 1)
+	_sleep(250, 450)
 	ipc.writeSB("3ab8", 1)
-	DspShow ("Gen", "On")
+    DspShow ("Gen", "On")
 end
 
 function Generator_BOTH_off ()
 	ipc.writeSB("3b78", 0)
+	_sleep(250, 450)
 	ipc.writeSB("3ab8", 0)
-	DspShow ("Gen", "Off")
+    DspShow ("Gen", "Off")
+end
+
+-- ## Engine start ###############
+
+-- starter
+function Starter_L_on ()
+	ipc.writeSB("0892", 1)
+    DspShow ("Start L", "On")
+end
+
+function Starter_L_off ()
+	ipc.writeSB("0892", 0)
+    DspShow ("Start L", "Off")
+end
+
+function Starter_R_on ()
+	ipc.writeSB("092a", 1)
+    DspShow ("Start R", "On")
+end
+
+function Starter_R_off ()
+	ipc.writeSB("092a", 0)
+    DspShow ("Start R", "Off")
 end
 
 
+----------------------
 -- ## Fuel #####################################
 
 -- Fuel Pumps:
-function Fuel_Pump_1_ENG_L_on ()
-	ipc.control(66340, 0)
-	DspShow("Pump L", "1 on")
-end
-
-function Fuel_Pump_1_ENG_L_off ()
-	ipc.control(66340, 1)
-	DspShow("Pump L", "off")
-end
-
 function Fuel_Pump_1_ENG_L_toggle()
-	Fuel_PumpswitchLState = ipc.readLvar("L:Fuel_PumpswitchL")
-	if Fuel_PumpswitchLState == 0 then
-		Fuel_Pump_1_ENG_L_on()
+	Fuel_PumpswitchLState = ipc.readLvar("L:FuelPumpswitchL")
+	if Fuel_PumpswitchLState == 1 then
+		ipc.control(66340, 0)
+		DspShow("Pump L", "1 on")
 	else
-		Fuel_Pump_1_ENG_L_off()
+		ipc.control(66340, 1)
+		DspShow("Pump L", "off")
 	end
-end
-
-function Fuel_Pump_1_ENG_R_on ()
-	ipc.control(66341, 0)
-	DspShow("Pump R", "1 on")
-end
-
-function Fuel_Pump_1_ENG_R_off ()
-	ipc.control(66341, 1)
-	DspShow("Pump R", "off")
 end
 
 function Fuel_Pump_1_ENG_R_toggle()
-	Fuel_PumpswitchRState = ipc.readLvar("L:Fuel_PumpswitchR")
-	if Fuel_PumpswitchRState == 0 then
-		Fuel_Pump_1_ENG_R_on()
+	Fuel_PumpswitchRState = ipc.readLvar("L:FuelPumpswitchR")
+	if Fuel_PumpswitchRState == 1 then
+		ipc.control(66341, 0)
+		DspShow("Pump R", "1 on")
 	else
-		Fuel_Pump_1_ENG_R_off()
+		ipc.control(66341, 1)
+		DspShow("Pump R", "off")
 	end
 end
 
-function Fuel_Pumps_on ()
-	Fuel_Pump_1_ENG_L_on ()
-	_sleep(150, 350)
-	Fuel_Pump_1_ENG_R_on ()
-end
-
-function Fuel_Pumps_off ()
-	 Fuel_Pump_1_ENG_L_off ()
-	_sleep(150, 350)
-	Fuel_Pump_ENG_2_off ()
-end
-
-function Fuel_Pump_1_ENG_L_toggle ()
-	 Fuel_Pump_1_ENG_L_off ()
-	_sleep(150, 350)
-	Fuel_Pump_1_ENG_R_toggle ()
+function Fuel_Pumps_1_ENG_BOTH_toggle ()
+	Fuel_Pump_1_ENG_R_toggle()
+	_sleep(350, 550)
+	Fuel_Pump_1_ENG_L_toggle()
 end
 
 -- Fuel Valves:
@@ -411,130 +446,117 @@ end
 
 -- ## Cowl Flaps #####################################
 
-function Duke_CowlFlap1_show ()
-	ipc.sleep(10)
-	CF1var = ipc.readLvar("L:RECIP ENG COWL FLAP POSITION1Ant")
-	if CF1var == 0 then CF1txt = "clsd"
-	elseif CF1var > 0 and CF1var < 1 then CF1txt = "half"
-	elseif CF1var == 1 then CF1txt = "open"
-	end
-	FLIGHT_INFO1 = "CwlL"
-	FLIGHT_INFO2 = CF1txt
-end
-
-function Duke_CowlFlap2_show ()
-	ipc.sleep(10)
-	CF2var = ipc.readLvar("L:RECIP ENG COWL FLAP POSITION2Ant")
-	if CF2var == 0 then CF2txt = "clsd"
-	elseif CF2var > 0 and CF2var < 1 then CF2txt = "half"
-	elseif CF2var == 1 then CF2txt = "open"
-	end
-	FLIGHT_INFO1 = "CwlR"
-	FLIGHT_INFO2 = CF2txt
+function Duke_Cowl_Flaps_show ()
+    CF2var = ipc.readLvar("L:Duke_Cowl_Flaps_Switch_1_Ant")
+    CF1var = ipc.readLvar("L:Duke_Cowl_Flaps_Switch_2_Ant")
+    CFvar = CF1var + CF2var
+    if CFvar == 0 then CFtxt = "closed"
+    elseif CFvar == 2 then CFtxt = "half"
+    elseif CFvar == 4 then CFtxt = "open"
+    else then "mixed"
+    end
+    DspShow ("Cowl", CFtxt)
 end
 
 function CowlFlaps_L_open ()
-	ipc.control(66162, 16400)
-	Duke_CowlFlap1_show ()
+	ipc.writeLvar("L:Duke_Cowl_Flaps_Switch_1", 2)
+	DspShow("Cowl R", "open")
 	LargerockerSound ()
 end
 
 function CowlFlaps_L_half ()
-	ipc.control(66162, 8200)
-	Duke_CowlFlap1_show ()
+	ipc.writeLvar("L:Duke_Cowl_Flaps_Switch_1", 1)
+	DspShow("Cowl R", "half")
 	LargerockerSound ()
 end
 
 function CowlFlaps_L_close ()
-	ipc.control(66162, 0)
-	Duke_CowlFlap1_show ()
+	ipc.writeLvar("L:Duke_Cowl_Flaps_Switch_1", 0)
+	DspShow("Cowl R", "close")
 	LargerockerSound ()
 end
 
 function CowlFlaps_R_open ()
-	ipc.control(66163, 16400)
-	Duke_CowlFlap2_show ()
+	ipc.writeLvar("R:Duke_Cowl_Flaps_Switch_2", 2)
+	DspShow("Cowl R", "open")
 	LargerockerSound ()
 end
 
 function CowlFlaps_R_half ()
-	ipc.control(66163, 8200)
-	Duke_CowlFlap2_show ()
+	ipc.writeLvar("R:Duke_Cowl_Flaps_Switch_2", 1)
+	DspShow("Cowl R", "half")
 	LargerockerSound ()
 end
 
 function CowlFlaps_R_close ()
-	ipc.control(66163, 0)
-	Duke_CowlFlap2_show ()
+	ipc.writeLvar("R:Duke_Cowl_Flaps_Switch_2", 0)
+	DspShow("Cowl R", "close")
 	LargerockerSound ()
 end
 
 function CowlFlaps_BOTH_open ()
 	CowlFlaps_L_open ()
 	CowlFlaps_R_open ()
+	DspShow("Cowl", "open")
 end
 
 function CowlFlaps_BOTH_half ()
 	CowlFlaps_L_half ()
 	CowlFlaps_R_half ()
+	DspShow("Cowl", "half")
 end
 
 function CowlFlaps_BOTH_close ()
 	CowlFlaps_L_close ()
 	CowlFlaps_R_close ()
+	DspShow("Cowl", "close")
 end
 
 function CowlFlaps_L_inc ()
-	CF1var = ipc.readLvar("L:RECIP ENG COWL FLAP POSITION1Ant")
-	if CF1var == 0 then
+	CF1var = ipc.readLvar("L:Duke_Cowl_Flaps_Switch_1_Ant")
+	if CF1var == 1 then
+		CowlFlaps_L_close ()
+	elseif CF1var == 2 then
 		CowlFlaps_L_half ()
-	elseif CF1var > 0 then
-		CowlFlaps_L_open ()
 	end
-	Duke_CowlFlap1_show ()
 end
 
 function CowlFlaps_L_dec ()
-	CF1var = ipc.readLvar("L:RECIP ENG COWL FLAP POSITION1Ant")
+	CF1var = ipc.readLvar("L:Duke_Cowl_Flaps_Switch_1_Ant")
 	if CF1var == 1 then
+		CowlFlaps_L_open ()
+	elseif CF1var == 0 then
 		CowlFlaps_L_half ()
-	elseif CF1var < 1 then
-		CowlFlaps_L_close ()
 	end
-	Duke_CowlFlap1_show ()
 end
 
---
-
 function CowlFlaps_R_inc ()
-	CF2var = ipc.readLvar("L:RECIP ENG COWL FLAP POSITION2Ant")
-	if CF2var == 0 then
-	CowlFlaps_R_half ()
-	elseif CF2var > 0 then
-	CowlFlaps_R_open ()
+	CF2var = ipc.readLvar("L:Duke_Cowl_Flaps_Switch_2_Ant")
+	if CF2var == 1 then
+		CowlFlaps_R_close ()
+	elseif CF2var == 2 then
+		CowlFlaps_R_half ()
 	end
-	Duke_CowlFlap2_show ()
 end
 
 function CowlFlaps_R_dec ()
-	CF2var = ipc.readLvar("L:RECIP ENG COWL FLAP POSITION2Ant")
+	CF2var = ipc.readLvar("L:Duke_Cowl_Flaps_Switch_2_Ant")
 	if CF2var == 1 then
-	CowlFlaps_R_half ()
-	elseif CF2var < 1 then
-	CowlFlaps_R_close ()
+		CowlFlaps_R_open ()
+	elseif CF2var == 0 then
+		CowlFlaps_R_half ()
 	end
-	Duke_CowlFlap2_show ()
 end
-
----
 
 function CowlFlaps_inc ()
 	CowlFlaps_L_inc ()
+	_sleep(350, 550)
 	CowlFlaps_R_inc ()
 end
 
 function CowlFlaps_dec ()
 	CowlFlaps_L_dec ()
+	_sleep(350, 550)
 	CowlFlaps_R_dec ()
 end
 
@@ -820,7 +842,7 @@ function Cabin_Pressure_Dump_toggle()
 end
 
 function Cabin_Rate_Knob_dec()
-	CabinRateVal = ipc.readLvar("L:CabinRateKnob")
+	CabinRateAlt = ipc.readLvar("L:CabinRateKnob")
 	if CabinRateAlt > ChangeCabinRateByX then
         ipc.writeLvar("L:CabinRateKnob", CabinRateAlt - ChangeCabinRateByX)
 	else
@@ -831,9 +853,9 @@ function Cabin_Rate_Knob_dec()
 end
 
 function Cabin_Rate_Knob_inc()
-	CabinRateState = ipc.readLvar("L:CabinRateKnob")
-	if CabinRateState <= 2000 - ChangeCabinRateByX then
-        ipc.writeLvar("L:CabinRateKnob", CabinRateState + ChangeCabinRateByX)
+	CabinRateAlt = ipc.readLvar("L:CabinRateKnob")
+	if CabinRateAlt <= 2000 - ChangeCabinRateByX then
+        ipc.writeLvar("L:CabinRateKnob", CabinRateAlt + ChangeCabinRateByX)
 	else
 	    ipc.writeLvar("L:CabinRateKnob", 2000)
 	end
