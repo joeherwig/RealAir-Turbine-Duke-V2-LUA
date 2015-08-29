@@ -1,4 +1,4 @@
--- module 1.0
+                         -- module 1.0
 -- August 2015
 -- ################################
 -- RealAir Duke Turbine B60 V2
@@ -223,54 +223,55 @@ end
 
 -- generator
 function Generator_L_on ()
-	ipc.writeSB("3b78", 0)
+	--c.writeSB("3b78", 0)
+	ipc.writeSB("0892", 2)
 	DspShow ("Gen L", "On")
 end
 
 function Generator_L_off ()
-	ipc.writeSB("3b78", 1)
+	ipc.writeSB("0892", 0)
 	DspShow ("Gen L", "Off")
 end
 
 function Generator_L_start ()
-	ipc.writeSB("3b78", 2)
+	ipc.writeSB("0892", 1)
 	DspShow ("Gen L", "start")
 end
 
-function Generator_L_toggle ()
-	GeneratorLStatus = ipc.readLvar("L:starterSwitchLAnt")
-	DspShow ("Gen L:", GeneratorLStatus)
-	if GeneratorLStatus == 1 then
-		Starter_L_on()
-	else
-		Starter_L_off()
+function Generator_L_cycle_OffStarterGenOn ()
+	GeneratorLStatus = ipc.readSB("0892")
+	if GeneratorLStatus == 0 and ipc.readLvar("L:prop1RunTest") == 0 then
+		Generator_L_start()
+	elseif GeneratorLStatus == 2 then
 		Generator_L_off()
+	else
+		Generator_L_on()
 	end
 end
 
 function Generator_R_on ()
-	ipc.writeSB("3ab8", 0)
+	ipc.writeSB("092a", 2)
 	DspShow ("Gen R", "On")
 end
 
 function Generator_R_off ()
-	ipc.writeSB("3ab8", 1)
+    ipc.writeSB("092a", 0)
 	DspShow ("Gen R", "Off")
 end
 
 function Generator_R_start ()
-	ipc.control(66301, 0)
-	DspShow ("Gen R", "start")
+	ipc.writeSB("092a", 1)
+    DspShow ("Gen R ", "start")
 end
 
-function Generator_R_toggle ()
-	GeneratorRStatus = ipc.readLvar("L:starterSwitchRAnt")
-	DspShow ("Gen R:", GeneratorRStatus)
-	if GeneratorRStatus == 1 then
-		Starter_R_on()
-	else
-		Starter_R_off()
+function Generator_R_cycle_OffStarterGenOn ()
+	GeneratorRStatus = ipc.readSB("092a")
+	if GeneratorRStatus == 0 and ipc.readLvar("L:prop2RunTest") == 0 then
+		Generator_R_start()
+	elseif GeneratorRStatus == 2 then
 		Generator_R_off()
+	else
+		Generator_R_on()
 	end
 end
 
@@ -288,30 +289,6 @@ function Generator_BOTH_off ()
     DspShow ("Gen", "Off")
 end
 
--- ## Engine start ###############
-
--- starter
-function Starter_L_on ()
-	ipc.writeSB("0892", 1)
-    DspShow ("Start L", "On")
-end
-
-function Starter_L_off ()
-	ipc.writeSB("0892", 0)
-    DspShow ("Start L", "Off")
-end
-
-function Starter_R_on ()
-	ipc.writeSB("092a", 1)
-    DspShow ("Start R", "On")
-end
-
-function Starter_R_off ()
-	ipc.writeSB("092a", 0)
-    DspShow ("Start R", "Off")
-end
-
-
 ----------------------
 -- ## Fuel #####################################
 
@@ -320,14 +297,14 @@ function Fuel_Pump_1_ENG_L_toggle()
 	Fuel_PumpswitchLState = ipc.readLvar("L:FuelPumpswitchL")
 	if Fuel_PumpswitchLState == 1 then
 		ipc.control(66340, 0)
-		DspShow("Pump L", "1 on")
+		DspShow("Pump L", "2 on")
 	else
 		ipc.control(66340, 1)
 		DspShow("Pump L", "off")
 	end
 end
 
-function Fuel_Pump_1_ENG_R_toggle()
+function Fuel_Pump_2_ENG_R_toggle()
 	Fuel_PumpswitchRState = ipc.readLvar("L:FuelPumpswitchR")
 	if Fuel_PumpswitchRState == 1 then
 		ipc.control(66341, 0)
@@ -447,13 +424,14 @@ end
 -- ## Cowl Flaps #####################################
 
 function Duke_Cowl_Flaps_show ()
+    _sleep(150, 350)
     CF2var = ipc.readLvar("L:Duke_Cowl_Flaps_Switch_1_Ant")
     CF1var = ipc.readLvar("L:Duke_Cowl_Flaps_Switch_2_Ant")
     CFvar = CF1var + CF2var
     if CFvar == 0 then CFtxt = "closed"
     elseif CFvar == 2 then CFtxt = "half"
     elseif CFvar == 4 then CFtxt = "open"
-    else then "mixed"
+    else CFtxt = "mixed"
     end
     DspShow ("Cowl", CFtxt)
 end
@@ -497,19 +475,19 @@ end
 function CowlFlaps_BOTH_open ()
 	CowlFlaps_L_open ()
 	CowlFlaps_R_open ()
-	DspShow("Cowl", "open")
+    Duke_Cowl_Flaps_show()
 end
 
 function CowlFlaps_BOTH_half ()
 	CowlFlaps_L_half ()
 	CowlFlaps_R_half ()
-	DspShow("Cowl", "half")
+    Duke_Cowl_Flaps_show()
 end
 
 function CowlFlaps_BOTH_close ()
 	CowlFlaps_L_close ()
 	CowlFlaps_R_close ()
-	DspShow("Cowl", "close")
+    Duke_Cowl_Flaps_show()
 end
 
 function CowlFlaps_L_inc ()
@@ -550,14 +528,14 @@ end
 
 function CowlFlaps_inc ()
 	CowlFlaps_L_inc ()
-	_sleep(350, 550)
 	CowlFlaps_R_inc ()
+    Duke_Cowl_Flaps_show()
 end
 
 function CowlFlaps_dec ()
 	CowlFlaps_L_dec ()
-	_sleep(350, 550)
 	CowlFlaps_R_dec ()
+    Duke_Cowl_Flaps_show()
 end
 
 
