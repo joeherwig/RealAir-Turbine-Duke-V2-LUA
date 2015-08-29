@@ -1,7 +1,7 @@
 # RealAir Turbine Duke V2 LINDA Module
 
-This repository is made to publish and document the lua-Script for LINDA made for the _RealAir Turbine Duke V2. 
-At the moment the focus is still on publishing the [actions.lua](Modules/linda/aircrafts/RealAir%20Duke%20Turbine%20V2/actions.lua) not on implementing the complete module.
+This repository is made to publish and document the lua-Script for LINDA made for the RealAir Turbine Duke V2. 
+At the moment the focus is still on publishing the [actions.lua](Modules/linda/aircrafts/RealAir%20Duke%20Turbine%20V2/actions.lua) not on implementing the complete LINDA module.
 
 ![ScreenShot](/img/Title.png)
 
