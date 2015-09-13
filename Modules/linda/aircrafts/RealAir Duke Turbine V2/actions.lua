@@ -17,6 +17,10 @@ function LargerockerSound ()
 	 ipc.writeLvar("L:LargerockerSound", 1)
 end
 
+function round(x)
+    return x + 0.5 - (x + 0.5) % 1
+end
+
 -- ## Avionics ###############
 
 function Inverter_on ()
@@ -643,6 +647,8 @@ function RXP_530_show ()
 	ipc.keypress(50,9)
 end
 
+-- Parking breaks
+
 function Parking_Breakes_set ()
 	ParkingBreakState = ipc.readLvar("L:Brake Parking PositionAnt")
 	if ParkingBreakState <= 50 then
@@ -664,6 +670,36 @@ function Parking_Breakes_toggle ()
         Parking_Breakes_set ()
 	else
         Parking_Breakes_release ()
+	end
+end
+
+-- Door
+function Door_state()
+	DoorOpeningState = ipc.readLvar("L:DukeDoor")
+	if DoorOpeningState >= 100 then
+        val = string.char(254)
+		DspShow("Door", "open"..val)
+	elseif DoorOpeningState <= 0 then
+		DspShow("Door", "closed")
+	else
+		DspShow("Door", round(DoorOpeningState).."%")
+		_sleep(100, 100)
+		Door_state()
+	end
+end
+
+function Door_toggle()
+	DoorOpeningState = ipc.readLvar("L:DukeDoor")
+	if DoorOpeningState >= 100 then
+		ipc.control(66389, 1)
+		_sleep(100, 100)
+        Door_state()
+	elseif DoorOpeningState <= 0 then
+		ipc.control(66389, 1)
+	   _sleep(100, 100)
+       Door_state()
+	else
+        Door_state()
 	end
 end
 
