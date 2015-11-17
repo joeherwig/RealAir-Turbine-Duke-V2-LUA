@@ -60,6 +60,13 @@ Added the Fuel-Valves for direct interaction and rotary encoders:
 ![Fuel Valves](/img/FuelValves.png)
 Here as well the _toggle-Function only toggles between "Off" and "On". "XFeed" is not included in the "_toggle".
 
+### Door
+Added following dedicated functions:
++ Door_state - returns the open-state (position) of the door, eg. 'open', '74%' (open) and 'closed'.
++ Door_open - opens the door. 
++ Door_close - closes the door.
++ Door_toggle - opens a closed door, and closes an open door. 
+
 ## Contributing
 
 Probably you want push this script a small step or a big leap forward. You're welcome to do so. Just fork this repo, check-in your changes and send me a pull-request.
