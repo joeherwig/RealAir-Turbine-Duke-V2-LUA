@@ -676,30 +676,43 @@ end
 -- Door
 function Door_state()
 	DoorOpeningState = ipc.readLvar("L:DukeDoor")
-	if DoorOpeningState >= 100 then
-        val = string.char(254)
-		DspShow("Door", "open"..val)
+	if DoorOpeningState == 100 then
+		DspShow("Door", "open")
 	elseif DoorOpeningState <= 0 then
 		DspShow("Door", "closed")
-	else
-		DspShow("Door", round(DoorOpeningState).."%")
-		_sleep(100, 100)
-		Door_state()
+    else
+       	DspShow("Door", round(DoorOpeningState).."%")
+    end
+end
+
+function Door_open()
+	DoorOpeningState = ipc.readLvar("L:DukeDoor")
+	if DoorOpeningState <= 0 then
+		ipc.control(66389, 1)
 	end
+    repeat
+        Door_state()
+    until ipc.readLvar("L:DukeDoor") >= 100
+    Door_state()
+end
+
+function Door_close()
+	DoorOpeningState = ipc.readLvar("L:DukeDoor")
+	if DoorOpeningState >= 100 then
+        ipc.control(66389, 1)
+	end
+    repeat
+        Door_state()
+    until ipc.readLvar("L:DukeDoor") <= 0
+    Door_state()
 end
 
 function Door_toggle()
 	DoorOpeningState = ipc.readLvar("L:DukeDoor")
 	if DoorOpeningState >= 100 then
-		ipc.control(66389, 1)
-		_sleep(100, 100)
-        Door_state()
-	elseif DoorOpeningState <= 0 then
-		ipc.control(66389, 1)
-	   _sleep(100, 100)
-       Door_state()
-	else
-        Door_state()
+        Door_close()
+    elseif DoorOpeningState <= 0 then
+        Door_open()
 	end
 end
 
