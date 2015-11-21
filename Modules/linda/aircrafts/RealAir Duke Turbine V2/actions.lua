@@ -127,8 +127,10 @@ end
 -- ## Electrics #####################################
 
 function Battery_on ()
+    BatteryState = ipc.readLvar("L:Electrical Master BatteryAnt")
+	DspShow ("VS", BatteryState)
 	ipc.writeDD("281C", 1)
-	DspShow ("BAT ", "On  ")
+	--DspShow ("BAT ", "On  ")
 	LargerockerSound ()
 end
 
@@ -972,3 +974,10 @@ function Cabin_Pressure_Temp_Lever_2_dec ()
 	DspShow ("CPrTemp2", CabinPressTemp2Value)
 end
 
+-- ## Events ###############
+function master_Warn_Display (NavLightVis, value)
+    -- writes the state of the Master Warning Display to the FSUIPC Offset 0x66C0 into Bit 0:
+    ipc.writeUB("66C0", value)
+end
+
+event.lvar("L:masterWarnDisplay", 100, "master_Warn_Display")
