@@ -975,9 +975,23 @@ function Cabin_Pressure_Temp_Lever_2_dec ()
 end
 
 -- ## Events ###############
-function master_Warn_Display (NavLightVis, value)
+function master_Warn_Display (Master_Warn_Display, value)
     -- writes the state of the Master Warning Display to the FSUIPC Offset 0x66C0 into Bit 0:
-    ipc.writeUB("66C0", value)
+    if value == 1 then
+        ipc.setbitsUW("66c0", 1)
+    else
+        ipc.clearbitsUW("66c0", 1)
+    end
 end
 
 event.lvar("L:masterWarnDisplay", 100, "master_Warn_Display")
+
+function door_Annunciator (Door_Annunciator, value)
+    -- writes the state of the Master Warning Display to the FSUIPC Offset 0x66C0 into Bit 9:
+    if value == 1 then
+        ipc.setbitsUW("66c0", 512)
+    else
+        ipc.clearbitsUW("66c0", 512)
+    end
+end
+event.lvar("L:CabinDoor_Annunciator", 100, "door_Annunciator")
